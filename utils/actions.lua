@@ -3,7 +3,7 @@ local function get_inventory_auth_string(player, meta, pos, label)
 end
 
 
-function has_locked_chest_privilege(meta, player)
+local function has_locked_chest_privilege(meta, player)
 	if player:get_player_name() ~= meta:get_string("owner") then
 		return false
 	end
@@ -11,7 +11,7 @@ function has_locked_chest_privilege(meta, player)
 end
 
 
-function get_allow_metadata_inventory_move(t)
+local function get_allow_metadata_inventory_move(t)
 	setmetatable(t, {__index={check_privs=has_locked_chest_privilege}})
 	local label, check_privs = t[1], t.check_privs
 	return function(pos, from_list, from_index, to_list, to_index, count, player)
@@ -24,7 +24,7 @@ function get_allow_metadata_inventory_move(t)
 	end
 end
 
-function get_allow_metadata_inventory_put(t)
+local function get_allow_metadata_inventory_put(t)
 	setmetatable(t, {__index={check_privs=has_locked_chest_privilege}})
 	local label, check_privs = t[1], t.check_privs
 	return function(pos, listname, index, stack, player)
@@ -37,7 +37,7 @@ function get_allow_metadata_inventory_put(t)
 	end
 end
 
-function get_allow_metadata_inventory_take(t)
+local function get_allow_metadata_inventory_take(t)
 	setmetatable(t, {__index={check_privs=has_locked_chest_privilege}})
 	local label, check_privs = t[1], t.check_privs
 	return function(pos, listname, index, stack, player)
@@ -57,20 +57,20 @@ local function get_inventory_action_string(player, pos, action, label)
 end
 
 
-function get_on_metadata_inventory_move(label)
+local function get_on_metadata_inventory_move(label)
 	return function(pos, from_list, from_index, to_list, to_index, count, player)
 		minetest.log("action", get_inventory_action_string(player, pos, "in", label)
 		)
 	end
 end
 
-function get_on_metadata_inventory_put(label)
+local function get_on_metadata_inventory_put(label)
 	return function(pos, listname, index, stack, player)
 		minetest.log("action", get_inventory_action_string(player, pos, "to", label))
 	end
 end
 
-function get_on_metadata_inventory_take(label)
+local function get_on_metadata_inventory_take(label)
 	return function(pos, listname, index, stack, player)
 		minetest.log("action", get_inventory_action_string(player, pos, "from", label))
 	end

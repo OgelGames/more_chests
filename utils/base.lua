@@ -14,7 +14,7 @@ local function parse_action(value, default_getter)
 	end
 end
 
-function generate_chest_def(def)
+local function generate_chest_def(def)
 	-- TODO assert def.size in ("big", "small")
 	local out = {
 		description = def.description,
