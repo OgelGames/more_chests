@@ -60,7 +60,7 @@ local function generate_chest_def(def)
 	}
 	-- register log actions, NOTE passing an anonymous function to avoid getting the default if not necessary
 	out.allow_metadata_inventory_move = parse_action(def.allow_metadata_inventory_move,
-		function()actions.get_allow_metadata_inventory_move{def.type} end)
+		function() actions.get_allow_metadata_inventory_move{def.type} end)
 	out.allow_metadata_inventory_put = parse_action(def.allow_metadata_inventory_put,
 		function() actions.get_allow_metadata_inventory_put{def.type} end)
 	out.allow_metadata_inventory_take = parse_action(def.allow_metadata_inventory_take,
