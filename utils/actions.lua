@@ -1,7 +1,9 @@
 local function get_inventory_auth_string(player, meta, pos, label)
-	return player:get_player_name() .. " tried to access a locked " .. label .. " belonging to " .. meta:get_string("owner") .. " at " .. minetest.pos_to_string(pos)
+	local name = player:get_player_name()
+	local owner = meta:get_string("owner")
+	local pos_str = minetest.pos_to_string(pos)
+	return ("%s tried to access a locked %s belonging to %s at %s"):format(name, label, owner, pos_str)
 end
-
 
 local function has_locked_chest_privilege(meta, player)
 	if player:get_player_name() ~= meta:get_string("owner") then
@@ -9,7 +11,6 @@ local function has_locked_chest_privilege(meta, player)
 	end
 	return true
 end
-
 
 local function get_allow_metadata_inventory_move(t)
 	setmetatable(t, {__index={check_privs=has_locked_chest_privilege}})
@@ -50,12 +51,11 @@ local function get_allow_metadata_inventory_take(t)
 	end
 end
 
-
-
 local function get_inventory_action_string(player, pos, action, label)
-	return player:get_player_name() .. " moves stuff " .. action .. " locked " .. label .. " at " .. minetest.pos_to_string(pos)
+	local name = player:get_player_name()
+	local pos_str = minetest.pos_to_string(pos)
+	return ("%s moves stuff %s locked %s at %s"):format(name, action, label, pos_str)
 end
-
 
 local function get_on_metadata_inventory_move(label)
 	return function(pos, from_list, from_index, to_list, to_index, count, player)
@@ -77,14 +77,13 @@ local function get_on_metadata_inventory_take(label)
 end
 
 
-
-actions = {
-		has_locked_chest_privilege = has_locked_chest_privilege,
-		get_allow_metadata_inventory_move = get_allow_metadata_inventory_move,
-		get_allow_metadata_inventory_put = get_allow_metadata_inventory_put,
-		get_allow_metadata_inventory_take = get_allow_metadata_inventory_take,
-		get_on_metadata_inventory_move = get_on_metadata_inventory_move,
-		get_on_metadata_inventory_put = get_on_metadata_inventory_put,
-		get_on_metadata_inventory_take = get_on_metadata_inventory_take,
+local actions = {
+	has_locked_chest_privilege = has_locked_chest_privilege,
+	get_allow_metadata_inventory_move = get_allow_metadata_inventory_move,
+	get_allow_metadata_inventory_put = get_allow_metadata_inventory_put,
+	get_allow_metadata_inventory_take = get_allow_metadata_inventory_take,
+	get_on_metadata_inventory_move = get_on_metadata_inventory_move,
+	get_on_metadata_inventory_put = get_on_metadata_inventory_put,
+	get_on_metadata_inventory_take = get_on_metadata_inventory_take,
 }
 return actions
